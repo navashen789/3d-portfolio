@@ -21,9 +21,23 @@ export default function App() {
 
   // Initialize Gemini
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+  
+  // Notice the backticks (`) used here so the multi-line text works perfectly!
   const model = genAI.getGenerativeModel({ 
     model: "gemini-2.5-flash",
-    systemInstruction: "You are the AI assistant for Navashen Svraaj A/L Mogan's portfolio. You answer questions about his skills and experience. Details: He is an Information Technology and digital electronics student specializing in networking systems. Currently an engineering intern in the Wide Band Gap Operation department at a semiconductor facility in Ipoh, Malaysia (internship ends May 22, 2026). He develops full-stack apps and PyTorch machine vision architectures. He speaks English, Tamil, and Bahasa Melayu. He is moving overseas for an AI Bachelor's degree on July 20, 2026. Keep answers short, professional, and friendly. If you don't know the answer, politely tell them to leave their contact info in the box below so Navashen can reach out."
+    systemInstruction: `You are the AI assistant for Navashen Svraaj A/L Mogan's portfolio. You answer questions about his skills and experience. Keep answers professional, concise, and friendly. 
+
+    Contact & Overview:
+    Name: Navashen Svraaj A/L Mogan. Titles: UN Volunteer, International Youth Leader, and Cybersecurity & Networking Specialist. Location: Ipoh, Perak, Malaysia. Email: raajvivo03@gmail.com. Phone: +60 17-588 9453.
+    
+    Education:
+    Diploma in Digital Technology (Networking) from Politeknik Mukah. 4.0 GPA. Planning CCNP Certification for Dec 2026.
+    
+    Volunteering & Leadership:
+    1st Registered UN Volunteer from Politeknik Mukah (2025). ASEAN Summit 2025 frontline volunteer. Represented youth at the International Climate Change Forum 2025. Participated in Youth Expedition Singapore 2025. Member of Alliance Cyber Security Initiative 2026. Directed multiple workshops including Bengkel Anugerah Remaja and ISAN SUPER Self-Discovery.
+    
+    Skills & Awards:
+    Cisco Networking (Packet Tracer, EVE-NG), Cloud Infrastructure & AI (AWS, LLM), Cybersecurity. Won Silver Medal at international Cisco NetRiders. Winner of AWS LLM 2024 PolyCC. Speaks English, Malay, and Tamil.`
   });
 
   useEffect(() => {
@@ -64,7 +78,6 @@ export default function App() {
     setChatHistory(prev => [...prev, { role: 'user', text: userMessage }]);
 
     try {
-      // Build previous chat history for context
       const formattedHistory = chatHistory.slice(1).map(msg => ({
         role: msg.role === 'model' ? 'model' : 'user',
         parts: [{ text: msg.text }]
@@ -75,7 +88,8 @@ export default function App() {
       
       setChatHistory(prev => [...prev, { role: 'model', text: result.response.text() }]);
     } catch (error) {
-      setChatHistory(prev => [...prev, { role: 'model', text: "SYSTEM ERROR: Connection to neural net failed. Please check API keys." }]);
+      console.error(error); // Logs exact error to browser console
+      setChatHistory(prev => [...prev, { role: 'model', text: `SYSTEM ERROR: ${error.message}` }]);
     }
   };
 
@@ -103,20 +117,18 @@ export default function App() {
   return (
     <div className="app-container">
       
-      {/* TOP NAVIGATION BAR */}
       <nav className="top-nav">
         <div className="nav-contact">
           <a href="mailto:raajvivo03@gmail.com" className="nav-link">MSG: raajvivo03@gmail.com</a>
           <a href="https://wa.me/60175889453" target="_blank" rel="noreferrer" className="nav-link">UPLINK: WhatsApp</a>
         </div>
-        <div className="AI FOR ASEAN">
-          <a href="/" className="pulse-button">
-            [ AI ]
+        <div className="nav-project">
+          <a href="https://asean-ai-bridge-lrar3axgwduvr9yk5n4y2b.streamlit.app/" target="_blank" rel="noreferrer" className="pulse-button">
+            [ PROJECT ASEAN AI BRIDGE ]
           </a>
         </div>
       </nav>
 
-      {/* 3D Canvas Background */}
       <div className="canvas-container">
         <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
           <Scene />
@@ -125,14 +137,13 @@ export default function App() {
 
       <main className="scroll-container">
         
-        {/* INTERACTIVE HERO SECTION */}
         <section id="hero" className="hero-split-section">
           <div className="cyber-grid"></div>
 
           <div className="split-layer left-layer">
             <div className="hero-text-container left-text">
               <h1>NAVASHEN SVRAAJ</h1>
-              <p>A 21 YEARS OLD YOUTH WHO IS PASSIONATE ABOUT TECHNOLOGY AND COMMUNITY SERVICE.</p>
+              <p>A 21-year-old passionate about making a difference through technology and community service.</p>
             </div>
             <img src="/face-left.png" alt="Hardware Profile" className="face-image" />
           </div>
@@ -140,7 +151,7 @@ export default function App() {
           <div className="split-layer right-layer">
             <div className="hero-text-container right-text">
               <h1>&lt;YOUTH VOLUNTEER&gt;</h1>
-              <p> From the state of Perak.</p>
+              <p>Who belive in small things can make a big difference and remember everthing starts with a single step.</p>
             </div>
             <img src="/face-right.png" alt="Software Profile" className="face-image" />
           </div>
@@ -156,10 +167,9 @@ export default function App() {
           </div>
         </section>
 
-        {/* VOLUNTEERING SECTION */}
         <section className="content-section">
           <h2>[ VOLUNTEERING ]</h2>
-          <p>Highlighting community involvement, technical demonstrations for cybersecurity awareness, and initiatives supporting local technological growth.</p>
+          <p>Highlighting community involvemment who uses technology to create positive impact and also being and overall volunteer in the ground.</p>
           <div className="photo-grid">
             <img src="/pic1.png" alt="Volunteering visual 1" className="photo-placeholder" />
             <img src="/pic2.png" alt="Volunteering visual 2" className="photo-placeholder" />
@@ -167,10 +177,9 @@ export default function App() {
           <a href="/volunteering-doc.pdf" download className="btn-neon-sm">DOWNLOAD_FILE</a>
         </section>
 
-        {/* LEADERSHIP SECTION */}
         <section className="content-section">
           <h2>[ LEADERSHIP ]</h2>
-          <p>Showcasing operational management experience, including technical presentations to department managers and coordinating engineering objectives within wide band gap semiconductor operations.</p>
+          <p>Leadership skills is very important when we working with team or community its because it helps in guiding and motivating others towards a common goal but also avoid an individual from being bossy.</p>
           <div className="photo-grid">
             <img src="/pic3.png" alt="Leadership visual 1" className="photo-placeholder" />
             <img src="/pic4.png" alt="Leadership visual 2" className="photo-placeholder" />
@@ -178,10 +187,9 @@ export default function App() {
           <a href="/leadership-doc.pdf" download className="btn-neon-sm">DOWNLOAD_FILE</a>
         </section>
 
-        {/* EDUCATION SECTION */}
         <section className="content-section">
           <h2>[ EDUCATION ]</h2>
-          <p>Specializing in Information Technology, networking systems, and digital electronics, with an upcoming progression into an international Bachelor's degree program focusing on artificial intelligence.</p>
+          <p>Specializing in Information Technology, networking systems, and digital electronics and Artificial Intelligence this helps in creating innovative solutions for real-world problems.</p>
           <div className="photo-grid">
             <img src="/pic5.png" alt="Education visual 1" className="photo-placeholder" />
             <img src="/pic6.png" alt="Education visual 2" className="photo-placeholder" />
@@ -204,7 +212,6 @@ export default function App() {
             <button className="close-btn" onClick={() => setIsAIOpen(false)}>×</button>
           </div>
           
-          {/* Chat History Area */}
           <div className="ai-history">
             {chatHistory.map((msg, idx) => (
               <div key={idx} className={`chat-bubble ${msg.role}`}>
@@ -214,7 +221,6 @@ export default function App() {
             <div ref={chatEndRef} />
           </div>
 
-          {/* AI Chat Input */}
           <div className="ai-input-area">
             <input 
               type="text" 
@@ -228,9 +234,8 @@ export default function App() {
             <button className="ai-submit" style={{ width: 'auto', padding: '0 15px' }} onClick={handleChatSubmit}>SEND</button>
           </div>
 
-          {/* Telegram Contact Drop */}
           <div className="ai-contact-area">
-            <p className="ai-highlight">Drop  your name and contact information (WhatsApp/Email) for direct contact:</p>
+            <p className="ai-highlight">Drop WhatsApp/Email for direct contact:</p>
             <div style={{ display: 'flex', gap: '5px' }}>
               <input 
                 type="text" 
