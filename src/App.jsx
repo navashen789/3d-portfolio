@@ -11,6 +11,9 @@ export default function App() {
   const [showAIPopup, setShowAIPopup] = useState(false);
   const [isAIOpen, setIsAIOpen] = useState(false);
   
+  // NEW: State to hold the converted PDF data
+  const [resumePdfBase64, setResumePdfBase64] = useState(null);
+  
   // Chat & Telegram States
   const [chatInput, setChatInput] = useState('');
   const [contactInput, setContactInput] = useState('');
@@ -25,6 +28,26 @@ export default function App() {
     model: "gemini-2.5-flash",
     systemInstruction: "You are the AI assistant for Navashen Svraaj A/L Mogan's portfolio. You answer questions about his skills and experience. Details: He is an Information Technology and digital electronics student specializing in networking systems. Currently an engineering intern in the Wide Band Gap Operation department at a semiconductor facility in Ipoh, Malaysia (internship ends May 22, 2026). He develops full-stack apps and PyTorch machine vision architectures. He speaks English, Tamil, and Bahasa Melayu. He is moving overseas for an AI Bachelor's degree on July 20, 2026. Keep answers short, professional, and friendly. If you don't know the answer, politely tell them to leave their contact info in the box below so Navashen can reach out."
   });
+
+  // NEW: Fetch and convert the PDF file silently in the background
+  useEffect(() => {
+    const fetchPDF = async () => {
+      try {
+        const response = await fetch('/resume.pdf');
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          // Extract just the raw base64 data string
+          const base64data = reader.result.split(',')[1];
+          setResumePdfBase64(base64data);
+        };
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        console.error("System Notice: Could not load the PDF for the AI.", error);
+      }
+    };
+    fetchPDF();
+  }, []);
 
   useEffect(() => {
     gsap.utils.toArray('.content-section').forEach((section) => {
@@ -70,6 +93,23 @@ export default function App() {
         parts: [{ text: msg.text }]
       }));
 
+      // NEW: Inject the PDF into the AI's hidden memory if it successfully loaded
+      if (resumePdfBase64) {
+        formattedHistory.unshift(
+          {
+            role: 'user',
+            parts: [
+              { text: "Here is my official resume document. Read it carefully and base all your answers on this file." },
+              { inlineData: { data: resumePdfBase64, mimeType: "application/pdf" } }
+            ]
+          },
+          {
+            role: 'model',
+            parts: [{ text: "Understood. I have read the PDF document and will use it to answer any questions." }]
+          }
+        );
+      }
+
       const chatSession = model.startChat({ history: formattedHistory });
       const result = await chatSession.sendMessage(userMessage);
       
@@ -109,9 +149,9 @@ export default function App() {
           <a href="mailto:raajvivo03@gmail.com" className="nav-link">MSG: raajvivo03@gmail.com</a>
           <a href="https://wa.me/60175889453" target="_blank" rel="noreferrer" className="nav-link">UPLINK: WhatsApp</a>
         </div>
-        <div className="nav-project">
-          <a href="/project-testing" className="pulse-button">
-            [ INITIALIZE LIVE SANDBOX ]
+        <div className="AI FOR ASEAN">
+          <a href="/" className="pulse-button">
+            [ AI FOR ASEAN PROJECT ]
           </a>
         </div>
       </nav>
