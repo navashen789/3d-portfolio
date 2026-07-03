@@ -154,18 +154,11 @@ section.content-section {
   display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; width: 100%; margin-bottom: 2rem;
 }
 .photo-placeholder {
-  width: 100%; /* Forces the image to fill its side of the grid */
-  height: 250px; /* Locks the height so they match perfectly */
-  object-fit: cover; /* Magic rule: crops the image to fit the box without stretching */
-  object-position: center; /* Keeps the focus on the center of the photo */
   background: rgba(0, 243, 255, 0.02);
-  border: 1px dashed var(--neon-cyan);
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-  color: var(--neon-cyan);
-  border-radius: 4px; /* Adds a nice slight curve to the corners */
+  border: 1px dashed var(--neon-cyan); height: 250px;
+  display: flex; justify-content: center; align-items: center; color: var(--neon-cyan);
 }
+
 .btn-neon-sm {
   display: inline-block; background: transparent;
   color: var(--neon-cyan); border: 1px solid var(--neon-cyan);
