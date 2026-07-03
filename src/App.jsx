@@ -11,9 +11,6 @@ export default function App() {
   const [showAIPopup, setShowAIPopup] = useState(false);
   const [isAIOpen, setIsAIOpen] = useState(false);
   
-  // NEW: State to hold the converted PDF data
-  const [resumePdfBase64, setResumePdfBase64] = useState(null);
-  
   // Chat & Telegram States
   const [chatInput, setChatInput] = useState('');
   const [contactInput, setContactInput] = useState('');
@@ -26,28 +23,8 @@ export default function App() {
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ 
     model: "gemini-2.5-flash",
-    systemInstruction: "You are the AI assistant for Navashen Svraaj A/L Mogan's portfolio. You answer questions about his skills and experience. Details: He is an Information Technology and digital electronics student specializing in networking systems. Currently an engineering intern in the Wide Band Gap Operation department at a semiconductor facility in Ipoh, Malaysia (internship ends May 22, 2026). He develops full-stack apps and PyTorch machine vision architectures. He speaks English, Tamil, and Bahasa Melayu. He is moving overseas for an AI Bachelor's degree on July 20, 2026. Keep answers short, professional, and friendly. If you don't know the answer, politely tell them to leave their contact info in the box below so Navashen can reach out."
+    systemInstruction: "Contact & OverviewName: Navashen Svraaj A/L Mogan.  Titles: UN Volunteer, International Youth Leader, and Cybersecurity & Networking Specialist.  Location: Ipoh, Perak, Malaysia.  Institution: Politeknik Mukah, Sarawak.  Contact Info: Email is raajvivo03@gmail.com and phone is +60 17-588 9453.  Education & CertificationsDegree: Diploma in Digital Technology (Networking) from Politeknik Mukah.  Academic Performance: 4.0 GPA and 3.86 HPNM.  Future Certifications: Planned CCNP Certification targeted for December 2026.  International Volunteering & EngagementsUnited Nations: Achieved the distinction of being the 1st Registered UN Volunteer from Politeknik Mukah in 2025.  ASEAN Summits: Served as a frontline volunteer at the ASEAN Summit 2025 and was selected as a national representative for the ASEAN Volunteer Forum 2025.  Global Forums: Represented Malaysian youth at the International Climate Change Forum in 2025 and participated in the Youth Expedition Singapore 2025.  International Training: Government-selected participant for the Belia Mahir Malaysia China TVET 2025 program, focusing on the AI sector.  National Volunteer Service (Malaysia)Cybersecurity: Active member of the Alliance Cyber Security Initiative 2026, focusing on national cyber resilience and digital defense workshops.  Community Events: Volunteered at the national Hari Belia Malaysia 2025 and supported operations at SUKMA 2024.  Rural Support & Education: Provided volunteering support in rural Sarawak via MISI SUKARELAWAN YSS 2024, and delivered STEM education to underserved schools in Kedah through STEM Discovery on Wheels 2025.  Campus Leadership: Served as a core member of I-CREW at Politeknik Mukah for event management and student welfare in 2024.  Leadership & Programme Director RolesYouth Development: Led the Bengkel Anugerah Remaja Perdana Rakan Muda workshop, managing over 100 participants.  Student Empowerment: Designed and directed the ISAN SUPER: Self-Discovery Workshop to build student self-awareness and career readiness.  Digital Literacy: Directed a Basic Computer Skills Workshop to bridge the technology gap for students at Politeknik Mukah.  Sports Logistics: Organized and directed a campus-wide badminton tournament, handling full event logistics and team coordination.  Special Participations & NominationsState Leadership: Nominated as a candidate for the Perak State Youth Council.  National Programs: Participated in the National Youth Unity Camp and represented youth voices at the National SDG Youth Convention.  Maritime Discipline: Selected for the prestigious Royal Sailing Voyage 472/24 (Kapal Layar Diraja Tunas Samudera) to develop teamwork and resilience.  Awards & AchievementsNetworking: Won a Silver Medal at the international Cisco NetRiders competition.  Cloud & AI: Winner of the AWS LLM 2024 PolyCC and achieved Microsoft Ready AI Security recognition.  Data Science: Participated in the Politeknik Malaysia Data Hackathon.  Core CompetenciesTechnical Skills: Cisco Networking (Packet Tracer, EVE-NG), Cloud Infrastructure & AI (AWS, LLM), and Cybersecurity Awareness & Digital Defence.  Soft Skills: Cross-Cultural Communication, International Diplomacy, Event Planning, Youth Mentorship, SDG Implementation, and Problem Solving Under Pressure.  Languages: Multilingual proficiency in English, Malay, and Tamil.  ReferencesPuan Roziah binti Zainal Abidin: Lecturer at Politeknik Mukah (013-809 9208).  En. Azizi Rahman: PA, DDT5G at Politeknik Mukah (014-746 9756).You are the AI assistant for Navashen Svraaj A/L Mogan's portfolio. You answer questions about his skills and experience. Details: He is an Information Technology and digital electronics student specializing in networking systems. Currently an engineering intern in the Wide Band Gap Operation department at a semiconductor facility in Ipoh, Malaysia (internship ends May 22, 2026). He develops full-stack apps and PyTorch machine vision architectures. He speaks English, Tamil, and Bahasa Melayu. He is moving overseas for an AI Bachelor's degree on July 20, 2026. Keep answers short, professional, and friendly. If you don't know the answer, politely tell them to leave their contact info in the box below so Navashen can reach out."
   });
-
-  // NEW: Fetch and convert the PDF file silently in the background
-  useEffect(() => {
-    const fetchPDF = async () => {
-      try {
-        const response = await fetch('/resume.pdf');
-        const blob = await response.blob();
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          // Extract just the raw base64 data string
-          const base64data = reader.result.split(',')[1];
-          setResumePdfBase64(base64data);
-        };
-        reader.readAsDataURL(blob);
-      } catch (error) {
-        console.error("System Notice: Could not load the PDF for the AI.", error);
-      }
-    };
-    fetchPDF();
-  }, []);
 
   useEffect(() => {
     gsap.utils.toArray('.content-section').forEach((section) => {
@@ -92,23 +69,6 @@ export default function App() {
         role: msg.role === 'model' ? 'model' : 'user',
         parts: [{ text: msg.text }]
       }));
-
-      // NEW: Inject the PDF into the AI's hidden memory if it successfully loaded
-      if (resumePdfBase64) {
-        formattedHistory.unshift(
-          {
-            role: 'user',
-            parts: [
-              { text: "Here is my official resume document. Read it carefully and base all your answers on this file." },
-              { inlineData: { data: resumePdfBase64, mimeType: "application/pdf" } }
-            ]
-          },
-          {
-            role: 'model',
-            parts: [{ text: "Understood. I have read the PDF document and will use it to answer any questions." }]
-          }
-        );
-      }
 
       const chatSession = model.startChat({ history: formattedHistory });
       const result = await chatSession.sendMessage(userMessage);
