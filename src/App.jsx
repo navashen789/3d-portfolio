@@ -131,16 +131,16 @@ export default function App() {
 
           <div className="split-layer left-layer">
             <div className="hero-text-container left-text">
-              <h1>SYSTEMS</h1>
-              <p>Industrial operations engineer specializing in networking systems and wide band gap manufacturing.</p>
+              <h1>NAVASHEN SVRAAJ</h1>
+              <p>A 21 YEARS OLD YOUTH WHO IS PASSIONATE ABOUT TECHNOLOGY AND COMMUNITY SERVICE.</p>
             </div>
             <img src="/face-left.png" alt="Hardware Profile" className="face-image" />
           </div>
 
           <div className="split-layer right-layer">
             <div className="hero-text-container right-text">
-              <h1>&lt;CODER&gt;</h1>
-              <p>Full-stack developer building PyTorch machine vision architectures and interactive web applications.</p>
+              <h1>&lt;YOUTH VOLUNTEER&gt;</h1>
+              <p> From the state of Perak.</p>
             </div>
             <img src="/face-right.png" alt="Software Profile" className="face-image" />
           </div>
