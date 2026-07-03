@@ -201,7 +201,7 @@ section.content-section {
   width: 100%; background: var(--neon-cyan); color: #000; border: none;
   padding: 0.75rem; font-weight: 700; cursor: pointer; font-family: 'Rajdhani'; font-size: 1.1rem;
 }
-//* =========================================
+/* =========================================
    6. MOBILE RESPONSIVENESS (iPhone / Android)
 ========================================= */
 @media (max-width: 768px) {
@@ -220,36 +220,38 @@ section.content-section {
   .nav-link { font-size: 0.8rem; }
   .pulse-button { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
 
-  /* 2. Clean up the Hero Section for Mobile */
+  /* 2. Aggressive Hero Text Fix */
   .hero-text-container { 
-    width: 45%; /* Prevents text from crossing the middle of the screen */
-    top: 25%; /* Moves the text HIGHER up, off your face */
-    transform: translateY(0);
+    width: 45% !important; /* Limits width so left and right never touch */
+    top: 18% !important; /* Pushes text to the top empty space */
+    transform: translateY(0) !important;
   }
-  .left-text { left: 5%; }
-  .right-text { right: 5%; }
+  .left-text { left: 2% !important; text-align: left !important; }
+  .right-text { right: 2% !important; text-align: right !important; }
   
   .hero-text-container h1 { 
-    font-size: 1.8rem; /* Shrinks the massive titles */
+    font-size: 1.5rem !important; /* Shrinks titles */
     text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+    word-break: break-word;
   }
   
-  /* Hides the long paragraph on mobile so it doesn't clutter the image */
+  /* FORCE the long paragraph to hide on mobile */
   .hero-text-container p { 
-    display: none; 
+    display: none !important; 
   }
   
-  /* Push the face down and resize to fit the new text layout */
+  /* Push the face down slightly so it doesn't hit the nav or text */
   .face-image { 
-    margin-top: 25vh; 
-    height: 65vh; 
+    margin-top: 25vh !important; 
+    height: 60vh !important; 
+    object-position: top center !important;
   }
   
-  /* Center the HUD Resume button and adjust spacing */
+  /* Center the HUD Resume button */
   .hero-hud { 
-    bottom: 12%; 
-    width: 100%; 
-    text-align: center; 
+    bottom: 12% !important; 
+    width: 100% !important; 
+    text-align: center !important; 
   }
   .btn-neon { font-size: 0.9rem; padding: 0.8rem 1rem; }
   .scroll-indicator { bottom: 15px; font-size: 0.8rem; }
@@ -271,13 +273,13 @@ section.content-section {
   /* 4. Fix AI Chat & Button Overlap */
   .ai-trigger-btn {
     right: 5vw;
-    bottom: 70px; /* Lifts the button UP so it doesn't block the scroll text */
+    bottom: 70px; 
     font-size: 0.85rem;
     padding: 0.8rem 1.2rem;
   }
   .ai-chat-window {
     width: 90vw; 
     right: 5vw;
-    bottom: 70px; /* Matches the lifted button height */
+    bottom: 70px; 
   }
 }
