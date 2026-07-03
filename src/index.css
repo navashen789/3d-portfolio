@@ -201,7 +201,7 @@ section.content-section {
   width: 100%; background: var(--neon-cyan); color: #000; border: none;
   padding: 0.75rem; font-weight: 700; cursor: pointer; font-family: 'Rajdhani'; font-size: 1.1rem;
 }
-/* =========================================
+//* =========================================
    6. MOBILE RESPONSIVENESS (iPhone / Android)
 ========================================= */
 @media (max-width: 768px) {
@@ -220,19 +220,39 @@ section.content-section {
   .nav-link { font-size: 0.8rem; }
   .pulse-button { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
 
-  /* 2. Resize the Split Hero Titles */
-  .hero-text-container { width: 85%; }
+  /* 2. Clean up the Hero Section for Mobile */
+  .hero-text-container { 
+    width: 45%; /* Prevents text from crossing the middle of the screen */
+    top: 25%; /* Moves the text HIGHER up, off your face */
+    transform: translateY(0);
+  }
   .left-text { left: 5%; }
   .right-text { right: 5%; }
-  .hero-text-container h1 { font-size: 2.5rem; }
-  .hero-text-container p { font-size: 0.9rem; }
   
-  /* Keep face images visible but scaled */
-  .face-image { margin-top: 15vh; height: 80vh; }
+  .hero-text-container h1 { 
+    font-size: 1.8rem; /* Shrinks the massive titles */
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+  }
   
-  /* Center the HUD Resume button */
-  .hero-hud { bottom: 12%; width: 100%; text-align: center; }
+  /* Hides the long paragraph on mobile so it doesn't clutter the image */
+  .hero-text-container p { 
+    display: none; 
+  }
+  
+  /* Push the face down and resize to fit the new text layout */
+  .face-image { 
+    margin-top: 25vh; 
+    height: 65vh; 
+  }
+  
+  /* Center the HUD Resume button and adjust spacing */
+  .hero-hud { 
+    bottom: 12%; 
+    width: 100%; 
+    text-align: center; 
+  }
   .btn-neon { font-size: 0.9rem; padding: 0.8rem 1rem; }
+  .scroll-indicator { bottom: 15px; font-size: 0.8rem; }
 
   /* 3. Stack the Photo Grids Vertically */
   section.content-section {
@@ -243,21 +263,21 @@ section.content-section {
   .content-section p { font-size: 1rem; }
   
   .photo-grid {
-    grid-template-columns: 1fr; /* Forces photos to stack 1-by-1 instead of side-by-side */
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
   .photo-placeholder { height: 200px; }
 
-  /* 4. Fit the AI Chat to the Phone Screen */
+  /* 4. Fix AI Chat & Button Overlap */
   .ai-trigger-btn {
     right: 5vw;
-    bottom: 20px;
+    bottom: 70px; /* Lifts the button UP so it doesn't block the scroll text */
     font-size: 0.85rem;
     padding: 0.8rem 1.2rem;
   }
   .ai-chat-window {
-    width: 90vw; /* Limits chat to 90% of phone screen width */
+    width: 90vw; 
     right: 5vw;
-    bottom: 20px;
+    bottom: 70px; /* Matches the lifted button height */
   }
 }
